@@ -3,4 +3,4 @@ WORKDIR /app
 COPY Calculator.java .
 RUN javac Calculator.java
 EXPOSE 8080
-CMD [ "java", "calculator" ]
+CMD ["java", "Calculator"]
