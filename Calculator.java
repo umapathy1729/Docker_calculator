@@ -15,7 +15,18 @@ public class Calculator {
         int port = 8080;
 
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+
+        // Context for calculations
         server.createContext("/calc", new CalcHandler());
+
+        // NEW: root context to avoid 404 on base URL
+        server.createContext("/", exchange -> {
+            String response = "Calculator server running. Use /calc?a=..&b=..&op=add|sub|mul|div";
+            exchange.sendResponseHeaders(200, response.getBytes().length); // UPDATED: use getBytes().length
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        });
 
         server.setExecutor(null);
         System.out.println("Calculator server running on port " + port);
@@ -26,7 +37,7 @@ public class Calculator {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            String response = "";
+            String response;
 
             try {
                 URI requestURI = exchange.getRequestURI();
@@ -70,7 +81,7 @@ public class Calculator {
         }
 
         private void sendResponse(HttpExchange exchange, String response) throws IOException {
-            exchange.sendResponseHeaders(200, response.length());
+            exchange.sendResponseHeaders(200, response.getBytes().length); // UPDATED: use getBytes().length
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
