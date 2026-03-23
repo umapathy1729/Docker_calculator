@@ -1,16 +1,15 @@
-FROM openjdk:17
+FROM eclipse-temurin:17-jdk
 
-# Set working directory inside container
 WORKDIR /app
 
-# Copy Java file into container
+# Copy your Java file into container
 COPY Calculator.java .
 
-# Compile the Java program
+# Compile Java program
 RUN javac Calculator.java
 
-# Expose port (optional if your Java app listens on a port)
+# Expose the port your server listens on
 EXPOSE 8080
 
-# Run the Java program
+# Run the program
 CMD ["java", "Calculator"]
